@@ -57,6 +57,15 @@ class Executor:
         return new_corpus
 
     
+    def filter_by_keywords(self, papers: list) -> list:
+        keywords = self.config.executor.get('keyword', None)
+        if not keywords:
+            return papers
+        keywords_lower = [k.lower() for k in keywords]
+        filtered = [p for p in papers if any(k in p.title.lower() for k in keywords_lower)]
+        logger.info(f"Filtered to {len(filtered)} papers matching keywords: {list(keywords)}")
+        return filtered
+
     def run(self):
         corpus = self.fetch_zotero_corpus()
         corpus = self.filter_corpus(corpus)
@@ -73,6 +82,7 @@ class Executor:
             logger.info(f"Retrieved {len(papers)} {source} papers")
             all_papers.extend(papers)
         logger.info(f"Total {len(all_papers)} papers retrieved from all sources")
+        all_papers = self.filter_by_keywords(all_papers)
         reranked_papers = []
         if len(all_papers) > 0:
             logger.info("Reranking papers...")
