@@ -40,6 +40,7 @@
 - Fast deployment via fork this repo and set environment variables in the Github Action Page.
 - Support LLM API for generating TL;DR of papers.
 - Ignore unwanted Zotero papers using glob pattern.
+- Filter retrieved papers by title keywords.
 - Support multiple sources of papers to retrieve:
   - arxiv
   - biorxiv
@@ -154,6 +155,7 @@ executor:
   max_paper_num: 100 # The maximum number of the papers presented in the email. Example: 100
   source: ??? # The sources of papers to retrieve. Example: ['arxiv','biorxiv','medrxiv']
   reranker: local # The reranker to use. Example: 'local' or 'api'
+  keyword: null # Optional list of keywords to filter retrieved papers by title (case-insensitive). A paper is kept if its title contains at least one keyword. Example: ["LLM","RAG","diffusion"]
 ```
 
 That's all! Now you can test the workflow by manually triggering it:
